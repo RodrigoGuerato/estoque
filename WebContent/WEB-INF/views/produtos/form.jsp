@@ -12,6 +12,7 @@
 		<h4>Dados do Produto</h4>
 	</div>
 	<f:form action="${s:mvcUrl('salvarProdutoUrl').build()}" method="post" modelAttribute="produto">
+		<f:hidden path="id"/>
 		<div>
 			<label for="descricao">Descrição</label>
 			<f:input path="descricao" />

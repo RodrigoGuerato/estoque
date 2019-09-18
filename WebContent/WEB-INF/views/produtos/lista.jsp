@@ -21,6 +21,7 @@
 					<th>Descrição</th>
 					<th>Quantidade</th>
 					<th>Localização</th>
+					<th>Ações</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -30,6 +31,9 @@
 						<td>${prod.descricao}</td>
 						<td>${prod.quantidade}</td>
 						<td>${prod.localizacao}</td>
+						<td>
+							<a href="${s:mvcUrl('alterarProdutoUrl').arg(0, prod.id).build()}">editar</a>
+						</td>
 					</tr>			
 				</c:forEach>		
 			</tbody>	

@@ -21,6 +21,7 @@ public class Produto {
 	public Produto() {
 		
 		this.quantidade = 0L;
+		this.estoqueMinimo = 0L;
 	}
 	
 	public Long getId() {

@@ -7,9 +7,11 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -26,32 +28,33 @@ public class ProdutoController {
 
 	@Autowired
 	private ProdutoDAO produtoDAO;
-	
+
 	@InitBinder
 	protected void init(WebDataBinder binder) {
-		
+
 		ProdutoValidator validadorDeProduto = new ProdutoValidator();
 		binder.setValidator(validadorDeProduto);
-	}	
+	}
 
-	@RequestMapping(value="/novo", name="novoProdutoUrl")
+	@RequestMapping(value = "/novo", name = "novoProdutoUrl")
 	public String form(Produto produto) {
 
 		System.out.println("carregando o formulario de produtos");
 		return "produtos/form";
 	}
 
-	@RequestMapping(method=RequestMethod.POST, name="salvarProdutoUrl")
-	public String salvarNoBanco(@Valid Produto produtoQueSeraSalvo, BindingResult resultadoValidacao, RedirectAttributes atributos) {
-		
+	@RequestMapping(method = RequestMethod.POST, name = "salvarProdutoUrl")
+	public String salvarNoBanco(@Valid Produto produtoQueSeraSalvo, BindingResult resultadoValidacao,
+			RedirectAttributes atributos) {
+
 		if (resultadoValidacao.hasErrors()) {
 			return form(produtoQueSeraSalvo);
 		}
-		
-		System.out.println("produto que chegou : " + produtoQueSeraSalvo.getDescricao());	
+
+		System.out.println("produto que chegou : " + produtoQueSeraSalvo.getDescricao());
 		produtoDAO.salvar(produtoQueSeraSalvo);
 		atributos.addFlashAttribute("status", "produto salvo com sucesso");
-		
+
 		return "redirect:/produtos";
 	}
 
@@ -63,6 +66,14 @@ public class ProdutoController {
 		mav.addObject("listaDeProdutos", dados);
 
 		return mav;
+	}
+
+	@RequestMapping(value = "{id}/edit", name = "alterarProdutoUrl")
+	public String alterarProduto(@PathVariable Long id, Model model) {
+		
+		Produto produtoEncontrado = produtoDAO.buscaPorId(id);
+		model.addAttribute(produtoEncontrado);
+		return form(produtoEncontrado);
 	}
 
 }
