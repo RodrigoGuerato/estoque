@@ -58,7 +58,7 @@ public class ProdutoController {
 		return "redirect:/produtos";
 	}
 
-	@RequestMapping(method = RequestMethod.GET)
+	@RequestMapping(method = RequestMethod.GET, name="listarProdutoUrl")
 	public ModelAndView listarProdutos() {
 
 		ModelAndView mav = new ModelAndView("produtos/lista");
@@ -70,10 +70,19 @@ public class ProdutoController {
 
 	@RequestMapping(value = "{id}/edit", name = "alterarProdutoUrl")
 	public String alterarProduto(@PathVariable Long id, Model model) {
-		
+
 		Produto produtoEncontrado = produtoDAO.buscaPorId(id);
 		model.addAttribute(produtoEncontrado);
 		return form(produtoEncontrado);
+	}
+
+	@RequestMapping(value = "/{id}", name = "detalharProdutoUrl")
+	public ModelAndView detalharProduto(@PathVariable Long id) {
+
+		Produto produtoVindoDoBanco = produtoDAO.buscaPorId(id);
+		ModelAndView mav = new ModelAndView("produtos/detalhe");
+		mav.addObject("produto", produtoVindoDoBanco);
+		return mav;
 	}
 
 }

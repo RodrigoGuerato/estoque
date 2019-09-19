@@ -33,6 +33,7 @@
 						<td>${prod.localizacao}</td>
 						<td>
 							<a href="${s:mvcUrl('alterarProdutoUrl').arg(0, prod.id).build()}">editar</a>
+							<a href="${s:mvcUrl('detalharProdutoUrl').arg(0, prod.id).build()}">detalhes</a>
 						</td>
 					</tr>			
 				</c:forEach>		
