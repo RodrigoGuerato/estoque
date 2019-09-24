@@ -31,5 +31,9 @@ public class ProdutoDAO {
 	public Produto buscaPorId(Long id) {
 		return manager.find(Produto.class, id);
 	}
+	
+	public void excluir(Produto objetoProduto) {
+		manager.remove(objetoProduto);
+	}
 
 }

@@ -58,7 +58,7 @@ public class ProdutoController {
 		return "redirect:/produtos";
 	}
 
-	@RequestMapping(method = RequestMethod.GET, name="listarProdutoUrl")
+	@RequestMapping(method = RequestMethod.GET, name = "listarProdutoUrl")
 	public ModelAndView listarProdutos() {
 
 		ModelAndView mav = new ModelAndView("produtos/lista");
@@ -85,4 +85,11 @@ public class ProdutoController {
 		return mav;
 	}
 
+	@RequestMapping(value = "/{id}/delete", method = RequestMethod.POST, name = "excluirProdutoUrl")
+	public String excluirProduto(@PathVariable Long id) {
+
+		Produto produtoEncontrado = produtoDAO.buscaPorId(id);
+		produtoDAO.excluir(produtoEncontrado);
+		return "redirect:/produtos";
+	}
 }

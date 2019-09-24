@@ -32,8 +32,11 @@
 						<td>${prod.quantidade}</td>
 						<td>${prod.localizacao}</td>
 						<td>
-							<a href="${s:mvcUrl('alterarProdutoUrl').arg(0, prod.id).build()}">editar</a>
-							<a href="${s:mvcUrl('detalharProdutoUrl').arg(0, prod.id).build()}">detalhes</a>
+							<form action="${s:mvcUrl('excluirProdutoUrl').arg(0, prod.id).build()}" method="post">
+								<a href="${s:mvcUrl('alterarProdutoUrl').arg(0, prod.id).build()}">editar</a>
+								<a href="${s:mvcUrl('detalharProdutoUrl').arg(0, prod.id).build()}">detalhes</a>
+								<button type="submit">Excluir</button>
+							</form>
 						</td>
 					</tr>			
 				</c:forEach>		
