@@ -38,8 +38,11 @@
 			<f:input type="number" path="estoqueMinimo" />
 			<f:errors path="estoqueMinimo"  />
 		</div>		
-		
-		
+		<div>
+			<label for="validade">Validade</label>
+			<f:input type="date" path="validade" />
+			<f:errors path="validade"  />
+		</div>		
 		<div>
 			<input type="submit" value="Salvar">
 		</div>		
