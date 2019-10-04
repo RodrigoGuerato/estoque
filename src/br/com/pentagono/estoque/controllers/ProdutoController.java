@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import br.com.pentagono.estoque.daos.FornecedorDAO;
 import br.com.pentagono.estoque.daos.ProdutoDAO;
 import br.com.pentagono.estoque.models.Produto;
 import br.com.pentagono.estoque.validations.ProdutoValidator;
@@ -28,6 +29,9 @@ public class ProdutoController {
 
 	@Autowired
 	private ProdutoDAO produtoDAO;
+	
+	@Autowired
+	private FornecedorDAO fornecedorDAO;
 
 	@InitBinder
 	protected void init(WebDataBinder binder) {
@@ -37,14 +41,16 @@ public class ProdutoController {
 	}
 
 	@RequestMapping(value = "/novo", name = "novoProdutoUrl")
-	public String form(Produto produto) {
-
+	public ModelAndView form(Produto produto) {
+		ModelAndView mav = new ModelAndView("produtos/form");
+		mav.addObject("fornecedores", fornecedorDAO.listarTodos());
+		
 		System.out.println("carregando o formulario de produtos");
-		return "produtos/form";
+		return mav;
 	}
 
 	@RequestMapping(method = RequestMethod.POST, name = "salvarProdutoUrl")
-	public String salvarNoBanco(@Valid Produto produtoQueSeraSalvo, BindingResult resultadoValidacao,
+	public ModelAndView salvarNoBanco(@Valid Produto produtoQueSeraSalvo, BindingResult resultadoValidacao,
 			RedirectAttributes atributos) {
 
 		if (resultadoValidacao.hasErrors()) {
@@ -54,8 +60,9 @@ public class ProdutoController {
 		System.out.println("produto que chegou : " + produtoQueSeraSalvo.getDescricao());
 		produtoDAO.salvar(produtoQueSeraSalvo);
 		atributos.addFlashAttribute("status", "produto salvo com sucesso");
-
-		return "redirect:/produtos";
+		
+		ModelAndView mav = new ModelAndView("redirect:/produtos");
+		return mav;
 	}
 
 	@RequestMapping(method = RequestMethod.GET, name = "listarProdutoUrl")
@@ -69,7 +76,7 @@ public class ProdutoController {
 	}
 
 	@RequestMapping(value = "{id}/edit", name = "alterarProdutoUrl")
-	public String alterarProduto(@PathVariable Long id, Model model) {
+	public ModelAndView alterarProduto(@PathVariable Long id, Model model) {
 
 		Produto produtoEncontrado = produtoDAO.buscaPorId(id);
 		model.addAttribute(produtoEncontrado);

@@ -14,7 +14,7 @@
 		<div id="navbar" class="collapse navbar-collapse">
 			<ul class="nav navbar-nav">
 				<li><a href="${s:mvcUrl('listarProdutoUrl').build()}">Produtos</a></li>
-				<li><a href="#">Outro Link</a></li>
+				<li><a href="${s:mvcUrl('listarFornecedorUrl').build()}">Fornecedores</a></li>
 				<li><a href="#">Outro Link</a></li>
 			</ul>
 		</div>

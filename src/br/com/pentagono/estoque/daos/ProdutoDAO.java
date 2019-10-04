@@ -16,12 +16,11 @@ public class ProdutoDAO {
 	private EntityManager manager;
 
 	public void salvar(Produto objetoProduto) {
-
-		System.out.println("salvando o produto: " + objetoProduto.getDescricao());
-		System.out.println("salvando o produto: " + objetoProduto.getLocalizacao());
-		System.out.println("salvando o produto: " + objetoProduto.getQuantidade());
-
-		manager.merge(objetoProduto);
+		if (objetoProduto.getId() == null) {
+			manager.persist(objetoProduto);
+		} else {
+			manager.merge(objetoProduto);
+		}
 	}
 
 	public List<Produto> listarTodos() {
@@ -31,7 +30,7 @@ public class ProdutoDAO {
 	public Produto buscaPorId(Long id) {
 		return manager.find(Produto.class, id);
 	}
-	
+
 	public void excluir(Produto objetoProduto) {
 		manager.remove(objetoProduto);
 	}

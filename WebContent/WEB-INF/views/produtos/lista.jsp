@@ -28,6 +28,7 @@
 						<thead>
 							<tr>
 								<th>Id</th>
+								<th>Fornecedor</th>
 								<th>Descrição</th>
 								<th>Quantidade</th>
 								<th>Localização</th>
@@ -38,6 +39,7 @@
 							<c:forEach items="${listaDeProdutos}" var="prod" >
 								<tr>
 									<td>${prod.id}</td>
+									<td>${prod.fornecedor.razaoSocial} </td>
 									<td>${prod.descricao}</td>
 									<td>${prod.quantidade}</td>
 									<td>${prod.localizacao}</td>

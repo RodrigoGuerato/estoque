@@ -1,20 +1,26 @@
 package br.com.pentagono.estoque.conf;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import br.com.pentagono.estoque.controllers.HomeController;
+import br.com.pentagono.estoque.converters.StringToFornecedorConverter;
 import br.com.pentagono.estoque.daos.ProdutoDAO;
 
 @EnableWebMvc
-@ComponentScan(basePackageClasses = { HomeController.class, ProdutoDAO.class })
+@ComponentScan(basePackageClasses = { HomeController.class, ProdutoDAO.class, StringToFornecedorConverter.class })
 public class AppWebConfiguration implements WebMvcConfigurer  {
+	
+	@Autowired
+	private StringToFornecedorConverter stringToFornecedorConverter;
 
 	@Bean
 	public InternalResourceViewResolver viewResolver() {
@@ -39,6 +45,11 @@ public class AppWebConfiguration implements WebMvcConfigurer  {
 		bundle.setDefaultEncoding("UTF-8");
 		bundle.setCacheSeconds(1);
 		return bundle;
-	}	
+	}		
+	
+	@Override
+	public void addFormatters(FormatterRegistry registry) {
+		registry.addConverter(stringToFornecedorConverter);
+	}
 	
 }

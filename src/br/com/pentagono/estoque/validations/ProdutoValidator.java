@@ -44,5 +44,12 @@ public class ProdutoValidator implements Validator {
 				errors.rejectValue("validade", "fora.validade");
 			}
 		}
+		
+		if ( prod.getFornecedor() ==  null || prod.getFornecedor().getId() == 0L ) {
+			errors.rejectValue("fornecedor", "campo.obrigatorio");
+		}
+		
+		
+		
 	}
 }

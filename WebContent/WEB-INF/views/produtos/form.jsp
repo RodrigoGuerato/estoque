@@ -20,6 +20,19 @@
 				<div class="row">
 					<div class="col-md-12">
 						<div class="form-group">
+							<label for="fornecedor">Fornecedor</label>
+							<f:select path="fornecedor" cssClass="form-control"> 
+								<f:option value="0">Selecione um Fornecedor</f:option>
+								<f:options items="${fornecedores}" itemLabel="razaoSocial" itemValue="id" />
+							</f:select>
+							<f:errors path="fornecedor" />						
+						</div>
+					</div>				
+				</div>
+				
+				<div class="row">
+					<div class="col-md-12">
+						<div class="form-group">
 							<label for="descricao">Descrição</label>
 							<f:input path="descricao" cssClass="form-control" />
 							<f:errors path="descricao" />

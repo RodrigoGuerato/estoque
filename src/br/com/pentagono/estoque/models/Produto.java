@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
@@ -26,10 +27,21 @@ public class Produto {
 	@DateTimeFormat(iso = ISO.DATE)
 	private LocalDate validade;
 
+	@ManyToOne
+	private Fornecedor fornecedor;
+
 	public Produto() {
 
 		this.quantidade = 0L;
 		this.estoqueMinimo = 0L;
+	}
+
+	public Fornecedor getFornecedor() {
+		return fornecedor;
+	}
+
+	public void setFornecedor(Fornecedor fornecedor) {
+		this.fornecedor = fornecedor;
 	}
 
 	public Long getId() {
