@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 
 <html>
-	<jsp:include page="base/header.jsp" />
+	<%@ include file="base/header.jsp" %>
 	<body>
-		<jsp:include page="base/navbar.jsp" />
+		<%@ include file="base/navbar.jsp" %>
 		
 		<div class="container">
 			<h1>Home do sistema de estoque</h1>
@@ -11,5 +11,5 @@
 		
 	</body>
 	
-	<jsp:include page="base/scripts.jsp" />
+	<%@ include file="base/scripts.jsp" %>
 </html>

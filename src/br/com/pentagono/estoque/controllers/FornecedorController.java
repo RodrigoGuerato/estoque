@@ -47,7 +47,7 @@ public class FornecedorController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, name = "salvarFornecedorUrl")
-	public String salvarNoBanco(@Valid Fornecedor fornecedorQueSeraSalvo, List<Produto> produtos,  BindingResult resultadoValidacao,
+	public String salvarNoBanco(@Valid Fornecedor fornecedorQueSeraSalvo,  BindingResult resultadoValidacao,
 			RedirectAttributes atributos) {
 
 		if (resultadoValidacao.hasErrors()) {

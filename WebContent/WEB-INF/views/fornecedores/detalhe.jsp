@@ -2,10 +2,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <html>
-	<jsp:include page="../base/header.jsp"/>
+	<%@ include file="../base/header.jsp" %>
 
 <body>
-	<jsp:include page="../base/navbar.jsp"/>
+	<%@ include file="../base/navbar.jsp" %>
 	<div class="container">
 		<div>
 			<h4>Dados do Fornecedor</h4>
@@ -24,6 +24,6 @@
 			<a class="btn btn-warning" href="${s:mvcUrl('listarFornecedorUrl').build()}">voltar</a>
 		</div>
 	</div>
-	<jsp:include page="../base/scripts.js"/>
+	<%@ include file="../base/scripts.jsp" %>
 </body>
 </html>

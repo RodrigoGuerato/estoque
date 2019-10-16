@@ -3,9 +3,9 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="f" uri="http://www.springframework.org/tags/form" %>
 <html>
-	<jsp:include page="../base/header.jsp" />
+	<%@ include file="../base/header.jsp" %>
 	<body>
-		<jsp:include page="../base/navbar.jsp" />
+		<%@ include file="../base/navbar.jsp" %>
 	
 		<div class="container">
 			<div class="row">
@@ -77,5 +77,5 @@
 		</div>
 	</body>
 	
-	<jsp:include page="../base/scripts.jsp" />
+	<%@ include file="../base/scripts.jsp" %>
 </html>
