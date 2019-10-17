@@ -30,7 +30,7 @@ public class UsuarioLoad {
 		usuarioAdmin.setPassword("1234");
 		usuarioAdmin.getAuthorities().add(perfiAdm);
 
-		if (usuarioDAO.buscaPorId(usuarioAdmin.getUsername()) == null) {
+		if (usuarioDAO.buscarPorId(usuarioAdmin.getUsername()) == null) {
 			perfiAcessoDAO.salvar(perfiAdm);
 			usuarioDAO.salvar(usuarioAdmin);
 		}

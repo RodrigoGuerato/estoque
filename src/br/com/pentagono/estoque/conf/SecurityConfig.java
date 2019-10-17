@@ -28,9 +28,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			antMatchers("/static/**").permitAll().
 			anyRequest().authenticated().
 			and().
-			formLogin().loginPage("/login").permitAll().
+			formLogin().defaultSuccessUrl("/").loginPage("/login").permitAll().
 			and().
-			logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
+			logout().logoutSuccessUrl("/").logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
 	}
 
 

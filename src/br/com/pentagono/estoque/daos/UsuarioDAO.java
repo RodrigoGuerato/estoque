@@ -1,5 +1,7 @@
 package br.com.pentagono.estoque.daos;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -20,8 +22,12 @@ public class UsuarioDAO implements UserDetailsService {
 		manager.merge(usuarioQueSeraSalvo);
 	}
 	
-	public Usuario buscaPorId(String login) {
+	public Usuario buscarPorId(String login) {
 		return manager.find(Usuario.class, login);
+	}
+	
+	public List<Usuario> listarTodos() {
+		return manager.createQuery("SELECT u from Usuario u").getResultList();
 	}
 
 	@Override
@@ -33,6 +39,11 @@ public class UsuarioDAO implements UserDetailsService {
 		}
 
 		return usuarioEncontrado;
+	}
+
+	public void excluir(Usuario produtoEncontrado) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

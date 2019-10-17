@@ -16,7 +16,6 @@
 			<ul class="nav navbar-nav">
 				<li><a href="${s:mvcUrl('listarProdutoUrl').build()}">Produtos</a></li>
 				<li><a href="${s:mvcUrl('listarFornecedorUrl').build()}">Fornecedores</a></li>
-				<li><a href="#">Outro Link</a></li>
 			</ul>
            	<ul class="nav navbar-nav navbar-right">
            	
@@ -31,6 +30,13 @@
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">${user.name} <span class="caret"></span></a>
 						<ul class="dropdown-menu">
 							<li><a href="#">Detalhes</a></li>
+							
+							<sec:authorize access="hasRole('ROLE_ADMIN')">
+								<li role="separator" class="divider"></li>
+								<li><a href="${s:mvcUrl('listarPerfilAcessoUrl').build()}">Perfis de Acesso</a></li>
+								<li><a href="${s:mvcUrl('listarUsuarioUrl').build()}">Usuários</a></li>
+							</sec:authorize>
+							
 							<li role="separator" class="divider"></li>
 							<li><a href="${pageContext.request.contextPath}/logout">Sair</a></li>
 						</ul>
