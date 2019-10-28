@@ -23,6 +23,7 @@ public class Produto {
 	private String localizacao;
 	private String categoria;
 	private Long estoqueMinimo;
+	private String caminhoFoto;
 
 	@DateTimeFormat(iso = ISO.DATE)
 	private LocalDate validade;
@@ -99,5 +100,15 @@ public class Produto {
 	public void setValidade(LocalDate validade) {
 		this.validade = validade;
 	}
+
+	public String getCaminhoFoto() {
+		return caminhoFoto;
+	}
+
+	public void setCaminhoFoto(String caminhofoto) {
+		this.caminhoFoto = caminhofoto;
+	}
+	
+	
 
 }

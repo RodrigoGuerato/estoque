@@ -12,7 +12,7 @@
 		</div>
 		<div>
 			<ul>
-				<li>Nome: ${perfilAcesso.nome}</li>
+				<li>Nome: ${perfilAcesso.authority}</li>
 				<li>Descrição: ${perfilAcesso.descricao}</li>
 			</ul>
 		</div>

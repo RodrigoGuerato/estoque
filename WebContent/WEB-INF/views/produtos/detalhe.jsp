@@ -21,6 +21,10 @@
 		</ul>
 	</div>
 	<div>
+		<img alt="foto do produto" src="${pageContext.request.contextPath}/${produto.caminhoFoto}">
+	</div>
+	
+	<div>
 		<a href="${s:mvcUrl('listarProdutoUrl').build()}">voltar</a>
 	</div>
 </body>

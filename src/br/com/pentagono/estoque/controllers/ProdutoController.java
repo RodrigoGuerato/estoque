@@ -14,12 +14,14 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.com.pentagono.estoque.daos.FornecedorDAO;
 import br.com.pentagono.estoque.daos.ProdutoDAO;
 import br.com.pentagono.estoque.models.Produto;
+import br.com.pentagono.estoque.utils.ArquivoUtils;
 import br.com.pentagono.estoque.validations.ProdutoValidator;
 
 @Controller
@@ -32,6 +34,9 @@ public class ProdutoController {
 	
 	@Autowired
 	private FornecedorDAO fornecedorDAO;
+	
+	@Autowired
+	private ArquivoUtils gravadorDeArquivo;
 
 	@InitBinder
 	protected void init(WebDataBinder binder) {
@@ -51,13 +56,18 @@ public class ProdutoController {
 
 	@RequestMapping(method = RequestMethod.POST, name = "salvarProdutoUrl")
 	public ModelAndView salvarNoBanco(@Valid Produto produtoQueSeraSalvo, BindingResult resultadoValidacao,
-			RedirectAttributes atributos) {
+			RedirectAttributes atributos, MultipartFile foto) {
 
 		if (resultadoValidacao.hasErrors()) {
 			return form(produtoQueSeraSalvo);
 		}
 
 		System.out.println("produto que chegou : " + produtoQueSeraSalvo.getDescricao());
+		System.out.println("Foto que Chegou: " + foto.getOriginalFilename());
+		
+		String caminhoDoArquivoEmDisco = gravadorDeArquivo.salvarEmDisco(foto);
+		produtoQueSeraSalvo.setCaminhoFoto(caminhoDoArquivoEmDisco);
+		
 		produtoDAO.salvar(produtoQueSeraSalvo);
 		atributos.addFlashAttribute("status", "produto salvo com sucesso");
 		

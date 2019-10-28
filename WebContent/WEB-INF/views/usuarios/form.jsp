@@ -16,6 +16,7 @@
 					</div>
 					
 					<div class="panel-body">
+					
 						<!-- Nav tabs -->
 						<ul class="nav nav-tabs" role="tablist">
 							<li role="presentation" class="active"><a href="#detalhesU" aria-controls="home" role="tab" data-toggle="tab">Detalhes</a></li>
@@ -138,7 +139,6 @@
 		$(document).ready(function() {	
 			$("#btnModalSim").click(function() {
 				var count = $("#tablePerfis tbody tr").length;
-				perfil
 				
 				$("#tablePerfis tbody").append("<tr>");
 				$("#tablePerfis tbody").append("	<input type='hidden' id='authorities[" + count + "].authority' name='authorities[" + count + "].authority' value='" + $("#perfil").val() + " ' />"); 

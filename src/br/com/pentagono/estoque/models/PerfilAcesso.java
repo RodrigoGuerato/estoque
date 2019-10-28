@@ -10,7 +10,7 @@ public class PerfilAcesso implements GrantedAuthority {
 
 	private static final long serialVersionUID = 1L;
 
-	@Id
+	@Id	
 	private String nome;
 	private String descricao;
 	
@@ -39,5 +39,4 @@ public class PerfilAcesso implements GrantedAuthority {
 	public void setAuthority(String nome) {
 		this.nome = nome;
 	}
-
 }

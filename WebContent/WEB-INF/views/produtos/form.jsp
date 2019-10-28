@@ -14,7 +14,7 @@
 				</div>
 			</div>
 			
-			<f:form action="${s:mvcUrl('salvarProdutoUrl').build()}" method="post" modelAttribute="produto">
+			<f:form action="${s:mvcUrl('salvarProdutoUrl').build()}" method="post" modelAttribute="produto" enctype="multipart/form-data">
 				<f:hidden path="id"/>
 				
 				<div class="row">
@@ -83,6 +83,16 @@
 						</div>
 					</div>
 				</div>		
+				
+				<div class="row">
+					<div class="col-md-12">
+						<div class="form-group">
+							<label for="foto">Foto do Produto</label>
+							<input name="foto" type="file"/>
+							<f:errors path="caminhoFoto" />
+						</div>					
+					</div>
+				</div>
 				
 				<div class="row">
 					<div class="col-md-12">

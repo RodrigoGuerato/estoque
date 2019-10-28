@@ -41,9 +41,8 @@ public class UsuarioDAO implements UserDetailsService {
 		return usuarioEncontrado;
 	}
 
-	public void excluir(Usuario produtoEncontrado) {
-		// TODO Auto-generated method stub
-		
+	public void excluir(Usuario usuarioEncontrado) {
+		manager.remove(usuarioEncontrado);		
 	}
 
 }

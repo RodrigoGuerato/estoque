@@ -21,6 +21,7 @@ public class Usuario implements UserDetails {
 	private String login;
 	private String password;
 	private String name;
+	private String caminhoFoto;
 
 	@ManyToMany(fetch = FetchType.EAGER)
 	private List<PerfilAcesso> perfis = new ArrayList<>();
@@ -81,4 +82,11 @@ public class Usuario implements UserDetails {
 		this.password = encoder.encode(password);
 	}
 
+	public String getCaminhoFoto() {
+		return caminhoFoto;
+	}
+
+	public void setCaminhoFoto(String caminhoFoto) {
+		this.caminhoFoto = caminhoFoto;
+	}
 }

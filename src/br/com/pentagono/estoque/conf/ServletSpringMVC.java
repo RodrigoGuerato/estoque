@@ -1,5 +1,8 @@
 package br.com.pentagono.estoque.conf;
 
+import javax.servlet.MultipartConfigElement;
+import javax.servlet.ServletRegistration.Dynamic;
+
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 import br.com.pentagono.estoque.daos.UsuarioLoad;
@@ -9,7 +12,8 @@ public class ServletSpringMVC extends AbstractAnnotationConfigDispatcherServletI
 	@Override
 	protected Class<?>[] getRootConfigClasses() {
 
-		return new Class[] { SecurityConfig.class, AppWebConfiguration.class, JPAConfiguration.class, UsuarioLoad.class };
+		return new Class[] { SecurityConfig.class, AppWebConfiguration.class, JPAConfiguration.class,
+				UsuarioLoad.class };
 	}
 
 	@Override
@@ -22,6 +26,11 @@ public class ServletSpringMVC extends AbstractAnnotationConfigDispatcherServletI
 	protected String[] getServletMappings() {
 
 		return new String[] { "/" };
+	}
+
+	@Override
+	protected void customizeRegistration(Dynamic registration) {		
+		registration.setMultipartConfig(new MultipartConfigElement(""));
 	}
 
 }

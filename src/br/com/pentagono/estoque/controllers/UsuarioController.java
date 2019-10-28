@@ -1,5 +1,6 @@
 package br.com.pentagono.estoque.controllers;
 
+import java.security.Principal;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -14,13 +15,14 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.com.pentagono.estoque.daos.PerfilAcessoDAO;
 import br.com.pentagono.estoque.daos.UsuarioDAO;
-import br.com.pentagono.estoque.models.PerfilAcesso;
 import br.com.pentagono.estoque.models.Usuario;
+import br.com.pentagono.estoque.utils.ArquivoUtils;
 import br.com.pentagono.estoque.validations.UsuarioValidator;
 
 @Controller
@@ -33,6 +35,9 @@ public class UsuarioController {
 
 	@Autowired
 	private PerfilAcessoDAO perfilAcessoDAO;
+	
+	@Autowired
+	private ArquivoUtils gravadorDeArquivos;
 
 	@InitBinder
 	protected void init(WebDataBinder binder) {
@@ -56,10 +61,6 @@ public class UsuarioController {
 
 		if (resultadoValidacao.hasErrors()) {
 			return form(usuarioQueSeraSalvo);
-		}
-		
-		for (PerfilAcesso perfil : usuarioQueSeraSalvo.getAuthorities()) {
-			perfilAcessoDAO.salvar(perfil);
 		}
 
 		usuarioDAO.salvar(usuarioQueSeraSalvo);
@@ -104,6 +105,30 @@ public class UsuarioController {
 		Usuario usuarioEncontrado = usuarioDAO.buscarPorId(id);
 		usuarioDAO.excluir(usuarioEncontrado);
 		return "redirect:/usuarios";
+	}
+
+	@RequestMapping(value = "/perfil", method = RequestMethod.GET, name = "perfilUsuarioUrl")
+	public ModelAndView perfil(Principal principal) {
+		
+		ModelAndView mav = new ModelAndView("usuarios/perfil");
+		Usuario usuarioLogado = usuarioDAO.buscarPorId(principal.getName());
+		mav.addObject("usuario", usuarioLogado);
+		
+		return mav;
+	}
+
+	@RequestMapping(value = "/perfil", method = RequestMethod.POST, name = "alterFotoPerfilUrl")
+	public String alterarFotoPerfil(MultipartFile foto, Principal principal) {
+		
+		String caminhoDaFoto = gravadorDeArquivos.salvarEmDisco(foto);
+		Usuario usuarioEncontrado = usuarioDAO.buscarPorId(principal.getName());
+		
+		usuarioEncontrado.setCaminhoFoto(caminhoDaFoto);
+		usuarioDAO.salvar(usuarioEncontrado);
+		
+		
+		
+		return "redirect:/usuarios/perfil";
 	}
 
 }
