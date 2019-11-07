@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -25,8 +26,11 @@ public class Fornecedor {
 	private String telefone;
 	private String email;
 
+	@Embedded
+	private Endereco endereco;
+
 	@JsonIgnore
-	@OneToMany(mappedBy = "fornecedor", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
+	@OneToMany(mappedBy = "fornecedor", cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, orphanRemoval = true)
 	private List<Produto> produtos = new ArrayList<>();
 
 	public Long getId() {
@@ -84,4 +88,13 @@ public class Fornecedor {
 	public void setProdutos(List<Produto> produtos) {
 		this.produtos = produtos;
 	}
+
+	public Endereco getEndereco() {
+		return endereco;
+	}
+
+	public void setEndereco(Endereco endereco) {
+		this.endereco = endereco;
+	}
+
 }

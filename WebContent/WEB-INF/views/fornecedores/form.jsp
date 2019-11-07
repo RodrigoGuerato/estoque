@@ -65,7 +65,73 @@
 							<f:errors path="telefone"  />
 						</div>		
 					</div>
-				</div>				
+				</div>		
+				
+				<!-- Endereco -->
+				<div class="row">
+					<div class="col-md-2">
+						<div class="form-group">
+							<label for="cep">CEP</label>
+							<f:input path="endereco.cep" cssClass="form-control" />
+							<f:errors path="endereco.cep" />
+						</div>					
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="form-group">
+							<label for="logradouro">Logradouro</label>
+							<f:input path="endereco.logradouro" cssClass="form-control" />
+							<f:errors path="endereco.logradouro" />
+						</div>					
+					</div>
+				</div>
+				<div class="row">
+					<div class="col">
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-2">
+						<div class="form-group">
+							<label for="numero">Número</label>
+							<f:input path="endereco.numero" cssClass="form-control" />
+							<f:errors path="endereco.numero" />
+						</div>					
+					</div>
+					<div class="col-md-5">
+						<div class="form-group">
+							<label for="complemento">Complemento</label>
+							<f:input path="endereco.complemento" cssClass="form-control" />
+							<f:errors path="endereco.complemento" />
+						</div>					
+					</div>
+					<div class="col-md-5">
+						<div class="form-group">
+							<label for="bairro">Bairro</label>
+							<f:input path="endereco.bairro" cssClass="form-control" />
+							<f:errors path="endereco.bairro" />
+						</div>					
+					</div>
+				</div>
+				
+				<div class="row">
+					<div class="col-md-8">
+						<div class="form-group">
+							<label for="municipio">Município</label>
+							<f:input path="endereco.municipio" cssClass="form-control" />
+							<f:errors path="endereco.municipio" />
+						</div>					
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label for="uf">UF</label>
+							<f:input path="endereco.uf" cssClass="form-control" />
+							<f:errors path="endereco.uf" />
+						</div>					
+					</div>
+				</div>
+				
+				<!-- Fim Endereco -->
 				
 				<div class="row">
 					<div class="col-md-12">
@@ -78,4 +144,42 @@
 	</body>
 	
 	<%@ include file="../base/scripts.jsp" %>
+	
+	<script type="text/javascript">
+		$(document).ready(function(){
+			console.log('teste5');
+			
+			$("#endereco\\.cep").change(function(){
+				var cepInformado = $("#endereco\\.cep").val();
+				
+				console.log("Cep capturado " + cepInformado);
+				
+				$.ajax({
+					type: "GET",
+					url: "http://viacep.com.br/ws/" + cepInformado +"/json/",
+					dataType: "json",
+					contentType: "application/json; charset=utf-8",
+					success: function (retorno) {
+						if (retorno != null) {
+							
+							if (retorno.erro) {
+								alert("CEP não localizado");	
+							} else {
+								//Se foi tudo bem atribui os valores
+								$("#endereco\\.logradouro").val(retorno.logradouro);
+								$("#endereco\\.complemento").val(retorno.complemento);
+								$("#endereco\\.bairro").val(retorno.bairro);
+								$("#endereco\\.municipio").val(retorno.localidade);
+								$("#endereco\\.uf").val(retorno.uf);
+							}
+						}
+					},
+					error: function() {
+						alert("CEP fora do formato");		
+					}
+				});				
+			});			
+		});	
+	</script>	
+	
 </html>
