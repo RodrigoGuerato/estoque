@@ -11,6 +11,8 @@ import javax.persistence.ManyToOne;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Produto {
 
@@ -28,6 +30,7 @@ public class Produto {
 	@DateTimeFormat(iso = ISO.DATE)
 	private LocalDate validade;
 
+	@JsonIgnore
 	@ManyToOne
 	private Fornecedor fornecedor;
 

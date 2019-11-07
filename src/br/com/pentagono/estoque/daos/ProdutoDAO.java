@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import org.springframework.stereotype.Repository;
 
@@ -33,6 +34,13 @@ public class ProdutoDAO {
 
 	public void excluir(Produto objetoProduto) {
 		manager.remove(objetoProduto);
+	}
+
+	public List<Produto> listarPorFornecedor(Long idFornecedor) {
+		Query busca = manager.createQuery("SELECT p FROM Produto p WHERE p.fornecedor.id = :id");
+		busca.setParameter("id", idFornecedor);
+		
+		return busca.getResultList();
 	}
 
 }

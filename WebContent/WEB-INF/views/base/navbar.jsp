@@ -16,6 +16,7 @@
 			<ul class="nav navbar-nav">
 				<li><a href="${s:mvcUrl('listarProdutoUrl').build()}">Produtos</a></li>
 				<li><a href="${s:mvcUrl('listarFornecedorUrl').build()}">Fornecedores</a></li>
+				<li><a href="${s:mvcUrl('listarPedidoCompraUrl').build()}">Pedido de Compra</a></li>
 			</ul>
            	<ul class="nav navbar-nav navbar-right">
            	
