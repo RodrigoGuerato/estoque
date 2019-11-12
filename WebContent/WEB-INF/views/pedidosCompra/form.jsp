@@ -72,7 +72,7 @@
 									</div>
 									<div class="row">
 										<div class="col-md-12">
-											<table class="table table-condensed" id="tbItens">
+											<table class="table table-condensed table-striped" id="tbItens">
 												<thead>
 													<tr>
 														<th>#</th>
@@ -91,11 +91,14 @@
 															<f:hidden path="itens[${status.index}].precoUnitario"/>
 															<f:hidden path="itens[${status.index}].precoTotal"/>
 															
+															<td>${status.index+1}</td>
 															<td>${itemPedido.produto.descricao}</td>
 															<td>${itemPedido.quantidade}</td>
 															<td>${itemPedido.precoUnitario}</td>		
 															<td>${itemPedido.precoTotal}</td>
-															<td>botoes</td>		
+															<td>
+																<button class='btn btn-danger btn-xs btnDeleteModal' type='button'>remover</button>
+															</td>		
 														</tr>		
 													</c:forEach>								
 												</tbody>											
@@ -137,6 +140,9 @@
 			            				<label for="produtoItem">Produto</label>
 			            				<select id="produtoItem" class="form-control">
 			            					<option value="">Selecione</option>
+			            					<c:forEach items="${produtosFornecedor}" var="prod">
+			            						<option value="${prod.id}">${prod.descricao}</option>
+			            					</c:forEach> 					
 			            				</select>			            			
 			            			</div>			            		
 			            		</div> 
@@ -173,7 +179,111 @@
 	<script type="text/javascript">
 		$(document).ready(function() {
 			
+			$("#fornecedor").on("change", function(){				
+				var fornecedorSel = $("#fornecedor").val();
+				$("#tbItens tbody").empty();	
+				
+				$.ajax({
+					type: "GET",
+					url: "/estoque/api/fornecedores/" + fornecedorSel + "/produtos",
+					dataType: "json",
+					contentType: "application/json; charset=utf-8",
+					success: function (retorno) {
+						if (retorno != null) {
+							var comboBox = $("#produtoItem");
+							comboBox.find("option").remove();
+
+							$("<option>").val("").text("Selecione").appendTo(comboBox);
+							
+							$.each(retorno, function (i, linha) {
+		                        $('<option>').val(linha.id).text(linha.descricao).appendTo(comboBox);
+		                    });							
+						}
+					},
+					error: function() {
+						alert("Houve uma falha na busca dos produtos");
+					}
+				});				
+			});
+			
+			$(document).on("click", "#btnModalSim", function() {				
+				var count = $("#tbItens tbody tr").length;				
+				var produtoCombo = $("#produtoItem");
+				var quantidade = $("#qtdeItem");
+				var precoUnit = $("#precoItem");
+				var valorTotal = quantidade.val() * precoUnit.val();
+				var temErro = false;
+				
+				$(produtoCombo).parent().find("span").remove();
+				$(quantidade).parent().find("span").remove();
+				$(precoUnit).parent().find("span").remove();
+				
+				if ( produtoCombo.find("option:selected").val() == "" ) {
+					$(produtoCombo).parent().append("<span>Campo Obrigatório</span>");
+					temErro = true;
+				}
+				if (quantidade.val() == "" || quantidade.val() == 0 ) {
+					$(quantidade).parent().append("<span>Campo Obrigatório</span>");
+					temErro = true;
+				}
+				if (precoUnit.val() == "" || precoUnit.val() == 0) {
+					$(precoUnit).parent().append("<span>Campo Obrigatório</span>");
+					temErro = true;
+				}
+				if ( temErro ) {
+					return
+				}				
+				
+				//Monta os valores na tabela html
+				var tabela = $("#tbItens tbody");
+				var elemento = "";
+				
+				elemento += "<tr>";
+				
+				elemento += "<input type='hidden' id='itens[" + count + "].produto' name='itens[" + count + "].produto' value='" + produtoCombo.find("option:selected").val() + "' />";
+				elemento += "<input type='hidden' id='itens[" + count + "].quantidade' name='itens[" + count + "].quantidade' value='" + quantidade.val() + "' />";
+				elemento += "<input type='hidden' id='itens[" + count + "].precoUnitario' name='itens[" + count + "].precoUnitario' value='" + precoUnit.val() + "' />";
+				elemento += "<input type='hidden' id='itens[" + count + "].precoTotal' name='itens[" + count + "].precoTotal' value='" + valorTotal + "' />";
+				
+				elemento += "<td>" + (count+1) + "</td>";
+				elemento += "<td>" + produtoCombo.find("option:selected").text() + "</td>";
+				elemento += "<td>" + quantidade.val() + "</td>";
+				elemento += "<td>" + precoUnit.val() + "</td>";
+				elemento += "<td>" + valorTotal + "</td>";
+				elemento += "<td>";
+				elemento += "<button class='btn btn-danger btn-xs btnDeleteModal' type='button'>remover</button>";
+				elemento += "</td>";
+				
+				elemento += "</tr>";
+				
+				tabela.append(elemento);				
+				
+				//Limpa as variaveis
+				produtoCombo.val("")
+				quantidade.val("");
+				precoUnit.val("");
+				
+				$("#modalItemPedido").modal("hide");				
+			});	
+			
+			$("#tbItens tbody").on("click", "button.btnDeleteModal", function(botao){
+				$(this).closest("tr").remove();
+			});
 		});
 	</script>
 	
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -15,6 +15,7 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import br.com.pentagono.estoque.controllers.HomeController;
 import br.com.pentagono.estoque.converters.StringToFornecedorConverter;
+import br.com.pentagono.estoque.converters.StringToProdutoConverter;
 import br.com.pentagono.estoque.daos.ProdutoDAO;
 import br.com.pentagono.estoque.utils.ArquivoUtils;
 
@@ -24,6 +25,9 @@ public class AppWebConfiguration implements WebMvcConfigurer {
 
 	@Autowired
 	private StringToFornecedorConverter stringToFornecedorConverter;
+	
+	@Autowired
+	private StringToProdutoConverter stringToProdutoConverter;
 
 	@Bean
 	public InternalResourceViewResolver viewResolver() {
@@ -53,6 +57,7 @@ public class AppWebConfiguration implements WebMvcConfigurer {
 	@Override
 	public void addFormatters(FormatterRegistry registry) {
 		registry.addConverter(stringToFornecedorConverter);
+		registry.addConverter(stringToProdutoConverter);
 	}
 
 	@Bean

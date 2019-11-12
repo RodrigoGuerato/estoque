@@ -19,6 +19,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.com.pentagono.estoque.daos.FornecedorDAO;
 import br.com.pentagono.estoque.daos.PedidoCompraDAO;
+import br.com.pentagono.estoque.daos.ProdutoDAO;
+import br.com.pentagono.estoque.models.ItemPedidoCompra;
 import br.com.pentagono.estoque.models.PedidoCompra;
 import br.com.pentagono.estoque.validations.PedidoCompraValidator;
 
@@ -26,12 +28,15 @@ import br.com.pentagono.estoque.validations.PedidoCompraValidator;
 @Transactional
 @RequestMapping("/pedidos-compra")
 public class PedidoCompraController {
-	
+
 	@Autowired
 	private PedidoCompraDAO pedidoCompraDAO;
-	
+
 	@Autowired
 	private FornecedorDAO fornecedorDAO;
+
+	@Autowired
+	private ProdutoDAO produtoDAO;
 
 	@InitBinder
 	protected void init(WebDataBinder binder) {
@@ -40,10 +45,14 @@ public class PedidoCompraController {
 
 	@RequestMapping(value = "/novo", name = "novoPedidoComprarUrl")
 	public ModelAndView form(PedidoCompra pedidoCompra) {
-		
+
 		ModelAndView mav = new ModelAndView("pedidosCompra/form");
 		mav.addObject("fornecedores", fornecedorDAO.listarTodos());
-		
+
+		if (pedidoCompra.getFornecedor() != null && pedidoCompra.getFornecedor().getId() != null) {
+			mav.addObject("produtosFornecedor", produtoDAO.listarPorFornecedor(pedidoCompra.getFornecedor().getId()));
+		}
+
 		return mav;
 	}
 
@@ -55,8 +64,11 @@ public class PedidoCompraController {
 			return form(registroQueSeraSalvo);
 		}
 
+		for (ItemPedidoCompra itemPedido : registroQueSeraSalvo.getItens()) {
+			itemPedido.setPedido(registroQueSeraSalvo);
+		}
 		pedidoCompraDAO.salvar(registroQueSeraSalvo);
-		
+
 		ModelAndView mav = new ModelAndView("redirect:/pedidos-compra");
 		return mav;
 	}
@@ -76,7 +88,7 @@ public class PedidoCompraController {
 
 		PedidoCompra pedidoEncontrado = pedidoCompraDAO.buscarPorId(id);
 		model.addAttribute(pedidoEncontrado);
-		
+
 		return form(pedidoEncontrado);
 	}
 
@@ -86,7 +98,7 @@ public class PedidoCompraController {
 		PedidoCompra pedidoVindoDoBanco = pedidoCompraDAO.buscarPorId(id);
 		ModelAndView mav = new ModelAndView("pedidosCompra/detalhe");
 		mav.addObject("pedidoCompra", pedidoVindoDoBanco);
-		
+
 		return mav;
 	}
 

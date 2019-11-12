@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -31,7 +32,7 @@ public class PedidoCompra {
 	private Fornecedor fornecedor;
 	private String condicaoPagamento;
 
-	@OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, fetch=FetchType.EAGER,  orphanRemoval = true)
 	private List<ItemPedidoCompra> itens = new ArrayList<>();
 
 	public Long getId() {
