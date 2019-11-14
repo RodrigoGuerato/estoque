@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -32,8 +34,22 @@ public class PedidoCompra {
 	private Fornecedor fornecedor;
 	private String condicaoPagamento;
 
-	@OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, fetch=FetchType.EAGER,  orphanRemoval = true)
+	@OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
 	private List<ItemPedidoCompra> itens = new ArrayList<>();
+
+	@Enumerated(EnumType.STRING)
+	private StatusPedido status;
+	
+	@DateTimeFormat(iso=ISO.DATE)
+	private LocalDate dataRecebimento;
+
+	public LocalDate getDataRecebimento() {
+		return dataRecebimento;
+	}
+
+	public void setDataRecebimento(LocalDate dataRecebimento) {
+		this.dataRecebimento = dataRecebimento;
+	}
 
 	public Long getId() {
 		return id;
@@ -73,5 +89,21 @@ public class PedidoCompra {
 
 	public void setItens(List<ItemPedidoCompra> itens) {
 		this.itens = itens;
+	}
+
+	public StatusPedido getStatus() {
+		return status;
+	}
+
+	public String getStatusFmt() {
+		if (this.status.equals(StatusPedido.EM_ABERTO)) {
+			return "EM ABERTO";
+		} else {
+			return this.status.toString();
+		}
+	}
+
+	public void setStatus(StatusPedido status) {
+		this.status = status;
 	}
 }

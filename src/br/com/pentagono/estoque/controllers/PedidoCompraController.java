@@ -1,5 +1,7 @@
 package br.com.pentagono.estoque.controllers;
 
+import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -18,10 +20,14 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.com.pentagono.estoque.daos.FornecedorDAO;
+import br.com.pentagono.estoque.daos.MovimentoEstoqueDAO;
 import br.com.pentagono.estoque.daos.PedidoCompraDAO;
 import br.com.pentagono.estoque.daos.ProdutoDAO;
 import br.com.pentagono.estoque.models.ItemPedidoCompra;
+import br.com.pentagono.estoque.models.MovimentoEstoque;
 import br.com.pentagono.estoque.models.PedidoCompra;
+import br.com.pentagono.estoque.models.Produto;
+import br.com.pentagono.estoque.models.StatusPedido;
 import br.com.pentagono.estoque.validations.PedidoCompraValidator;
 
 @Controller
@@ -37,6 +43,9 @@ public class PedidoCompraController {
 
 	@Autowired
 	private ProdutoDAO produtoDAO;
+
+	@Autowired
+	private MovimentoEstoqueDAO movimentoEstoqueDAO;
 
 	@InitBinder
 	protected void init(WebDataBinder binder) {
@@ -108,6 +117,55 @@ public class PedidoCompraController {
 		PedidoCompra pedidoEncontrado = pedidoCompraDAO.buscarPorId(id);
 		pedidoCompraDAO.excluir(pedidoEncontrado);
 		return "redirect:/pedidos-compra";
+	}
+
+	@RequestMapping(value = "/{id}/status", method = RequestMethod.GET, name = "detalharPedidoStatusUrl")
+	public ModelAndView detalharPedidoParaAlterarStatus(@PathVariable Long id, PedidoCompra pedidoStatus) {
+
+		PedidoCompra pedidoVindoDoBanco = pedidoCompraDAO.buscarPorId(id);
+		ModelAndView mav = new ModelAndView("pedidosCompra/alteraStatus");
+		mav.addObject("pedidoCompra", pedidoVindoDoBanco);
+		mav.addObject("listaDeStatus", StatusPedido.values());
+
+		return mav;
+	}
+
+	@RequestMapping(value = "/status", method = RequestMethod.POST, name = "alterarStatusPedidoUrl")
+	public ModelAndView alterarStatusPedido(PedidoCompra pedidoStatus, Principal principal) {
+
+		PedidoCompra pedidoCompleto = pedidoCompraDAO.buscarPorId(pedidoStatus.getId());
+
+		if (pedidoStatus.getStatus().equals(StatusPedido.RECEBIDO)) {
+			for (ItemPedidoCompra itemPedido : pedidoCompleto.getItens()) {
+
+				// Soma as quantidades em estoque
+				Produto produtoCompleto = produtoDAO.buscaPorId(itemPedido.getProduto().getId());
+				Long quantidadeAtual = produtoCompleto.getQuantidade();
+				quantidadeAtual = quantidadeAtual + Math.round(itemPedido.getQuantidade());
+
+				produtoCompleto.setQuantidade(quantidadeAtual);
+				produtoDAO.salvar(produtoCompleto);
+
+				// Criar um registro de Movimento do Estoque
+				MovimentoEstoque movimento = new MovimentoEstoque();
+
+				movimento.setDataHora(LocalDateTime.now());
+				movimento.setPedido(pedidoCompleto);
+				movimento.setProduto(produtoCompleto);
+				movimento.setQuantidade(quantidadeAtual);
+				movimento.setLoginUsuario(principal.getName());
+
+				movimentoEstoqueDAO.salvar(movimento);
+			}
+		}
+
+		// Atualiza o Status do Pedido
+		pedidoCompleto.setStatus(pedidoStatus.getStatus());
+		pedidoCompleto.setDataRecebimento(pedidoStatus.getDataRecebimento());
+		pedidoCompraDAO.salvar(pedidoCompleto);
+
+		ModelAndView mav = new ModelAndView("redirect:/pedidos-compra");
+		return mav;
 	}
 
 }

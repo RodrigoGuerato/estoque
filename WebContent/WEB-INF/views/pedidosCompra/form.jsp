@@ -10,7 +10,9 @@
 		<div class="container">
 			<f:form action="${s:mvcUrl('salvarPedidoCompraUrl').build()}" method="post" modelAttribute="pedidoCompra" >
 			
-				<f:hidden path="id"/>			
+				<f:hidden path="id"/>
+				<f:hidden path="status"/>
+							
 				<div class="panel panel-primary">
 					<div class="panel-heading">
 						<h3 class="panel-title">Dados do Pedido</h3>

@@ -32,6 +32,7 @@
 								<th>Fornecedor</th>
 								<th>Data Lançamento</th>
 								<th>Condição de Pagamento</th>
+								<th>Status</th>
 								<th>Ações</th>
 							</tr>
 						</thead>
@@ -42,11 +43,16 @@
 									<td>${registro.fornecedor.razaoSocial} </td>
 									<td>${registro.data}</td>
 									<td>${registro.condicaoPagamento}</td>
+									<td>${registro.getStatusFmt()}</td>
 									<td>
 										<f:form action="${s:mvcUrl('excluirPedidoCompraUrl').arg(0, registro.id).build()}" method="post">
-											<a class="btn btn-warning btn-xs" href="${s:mvcUrl('alterarPedidoCompraUrl').arg(0, registro.id).build()}">editar</a>
 											<a class="btn btn-success btn-xs" href="${s:mvcUrl('detalharPedidoCompraUrl').arg(0, registro.id).build()}">detalhes</a>
-											<button class="btn btn-danger btn-xs" type="submit">Excluir</button>
+											
+											<c:if test="${registro.status == 'EM_ABERTO'}">
+												<a class="btn btn-warning btn-xs" href="${s:mvcUrl('alterarPedidoCompraUrl').arg(0, registro.id).build()}">editar</a>
+												<button class="btn btn-danger btn-xs" type="submit">Excluir</button>
+												<a class="btn btn-primary btn-xs" href="${s:mvcUrl('detalharPedidoStatusUrl').arg(0, registro.id).build()}">receber</a>
+											</c:if>
 										</f:form>
 									</td>
 								</tr>			
